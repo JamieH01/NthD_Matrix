@@ -9,7 +9,10 @@
 }
 
 
-        //vec_a is user input to compair against
+
+
+
+        //vec_a is user input to compare against
 fn oob(vec_a:&Vec<usize>, vec_b:&Vec<usize>) -> bool {
     for i in 0..vec_a.len() {
         if vec_a[i] >= vec_b[i] {return true}
@@ -71,10 +74,7 @@ impl<T: Clone> NdMatrix<T> {
         if index.len() != self.size.len() {return Some(Error::InvalidDimensions)}
         if oob(&index, &self.size) {return Some(Error::OOBIndex)}
         
-        let mut total:usize = 0;
-        for i in 0..self.dimensions {
-            total += index[i] * (self.dimensions - (i+1))
-        }
+        let total = self.pos_to_nth(index);
 
         self.data[total] = value;
 
@@ -91,16 +91,28 @@ impl<T: Clone> NdMatrix<T> {
 
 
     pub fn pos_to_nth(&self, index:Vec<usize>) -> usize {
-        let mut total:usize = 0;
-        for i in 0..self.dimensions {
-            total += index[i] * (self.dimensions - (i+1))
+        let mut total:usize = index[0];
+        let mut stride: usize = 1;
+        for i in 1..self.dimensions {
+            stride *= self.size[i-1];
+            total += index[i] * stride;
         }    
 
-        total    
+        total
     }
-
-    pub fn nth_to_pos(&self, _index:usize) -> Vec<usize> {
-        todo!()
+            //i want to pull my hair out
+    pub fn nth_to_pos(&self, index:usize) -> Vec<usize> {
+        let mut position = vec![0; self.dimensions];
+        let mut remaining_index = index;
+        for i in (0..self.dimensions).rev() {
+            let size_i = self.size[i];
+            let quotient = remaining_index / size_i;
+            let remainder = remaining_index % size_i;
+            position[i] = remainder;
+            remaining_index = quotient;
+        }
+        position
+    
     }
 
     //properties

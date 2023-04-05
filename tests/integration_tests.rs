@@ -30,4 +30,15 @@ mod integration_tests {
         println!("{value1} {value2}");
 
     }
+
+    #[test]#[allow(unused_variables)]
+    fn position_conversion() {
+        let matrix = matrix!([4,3]; usize, 15);
+
+        let starting_index = 3;
+        let index_to_pos = matrix.nth_to_pos(starting_index);//should return 7
+        let pos_to_index = matrix.pos_to_nth(index_to_pos.clone());
+
+        println!("{starting_index} => {index_to_pos:?} => {pos_to_index}");
+    }
 }
