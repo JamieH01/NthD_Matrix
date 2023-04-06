@@ -1,4 +1,4 @@
-A simple library that allows you to use matrixes of any size and dimension, and access their internals as a regular old vector. NdMatrix provides a flexible data structure for any data, with basic arithmetic operations (thanks num_traits!).
+A simple library that allows you to use matrixes of any size and dimension, and access their internals as a regular old vector. NdMatrix provides a flexible data structure for any data, with basic arithmetic operations (thanks num_traits!). Check the `Docs.md` file on github for more info.
 
 Matrixes can be initialized easily with the `matrix!` macro:
 ```
@@ -26,4 +26,4 @@ let matrix_b = matrix!([5,5]; usize, 10);
 matrix_a.add(matrix_b);//adds 2 matrixes
 matrix_a.const_add(15);//adds one value to every element of a matrix
 ```
-`add`, `sub`, `div`, and `mul` can be called, along with their constant counterparts. Note that the 2 matrixes MUST be the same size, and `mul` is not the traditional "matrix multiplication," it simply multiplies each element together (coming soon).
+`add`, `sub`, `mul`, and `div` can be called, along with their constant counterparts. Note that the 2 matrixes MUST be the same size, and `mul` is not the traditional "matrix multiplication," it simply multiplies each element together (coming soon).
