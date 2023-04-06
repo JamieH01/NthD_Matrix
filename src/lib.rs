@@ -23,7 +23,7 @@ fn oob(vec_a:&Vec<usize>, vec_b:&Vec<usize>) -> bool {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct NdMatrix<T> {
-    data:Vec<T>,//data of the matrix
+    pub data:Vec<T>,//data of the matrix
 
     dimensions:usize,//how many layers
     size:Vec<usize>,//size of each layer

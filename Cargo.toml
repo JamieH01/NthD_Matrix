@@ -4,7 +4,9 @@ version = "0.0.9"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "A library for using matrixes of any arbitrary size and dimension"
-
+repository = "https://github.com/JamieH01/NthD_Matrix"
+keywords = ["matrix", "structure"]
+categories = ["data-structures", "mathematics"]
 
 [lib]
 name = "nd_matrix"
