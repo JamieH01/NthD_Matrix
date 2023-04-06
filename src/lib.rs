@@ -21,7 +21,7 @@ fn oob(vec_a:&Vec<usize>, vec_b:&Vec<usize>) -> bool {
     return false
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct NdMatrix<T> {
     data:Vec<T>,//data of the matrix
 
@@ -66,23 +66,23 @@ impl<T: Clone> NdMatrix<T> {
     }
 
 
-    pub fn set_pos(&mut self, index:Vec<usize>, value:T) -> Option<Error> {
-        if index.len() != self.size.len() {return Some(Error::InvalidDimensions)}
-        if oob(&index, &self.size) {return Some(Error::OOBIndex)}
+    pub fn set_pos(&mut self, index:Vec<usize>, value:T) -> Result<(), Error> {
+        if index.len() != self.size.len() {return Err(Error::InvalidDimensions)}
+        if oob(&index, &self.size) {return Err(Error::OOBIndex)}
         
         let total = self.pos_to_nth(index).unwrap();
 
         self.data[total] = value;
 
-        None //returning None is actually the good path as no errors were returned
+        Ok(()) //returning None is actually the good path as no errors were returned
     }
 
-    pub fn set_nth(&mut self, index:usize, value:T) -> Option<Error> {
-        if index >= self.length {return Some(Error::OOBIndex)}
+    pub fn set_nth(&mut self, index:usize, value:T) -> Result<(), Error> {
+        if index >= self.length {return Err(Error::OOBIndex)}
 
         self.data[index] = value;
 
-        None
+        Ok(())
     }
 
 
@@ -132,8 +132,140 @@ impl<T: Clone> NdMatrix<T> {
 
 }
 
+//arithmetic
+impl<T:num_traits::Num + Clone + Copy + 
+num_traits::CheckedAdd + num_traits::CheckedSub + num_traits::CheckedMul + num_traits::CheckedDiv> 
+NdMatrix<T> {
+    //basic arithmetic
+    pub fn add(&mut self, operand:NdMatrix<T>) -> Result<(), Error> {
+        if self.dimensions != operand.dimensions {return Err(Error::InvalidDimensions)}
+        
+        let res = self.data[0].checked_add(&operand.data[0]);
+        if res == None {return Err(Error::CannotOperate)}
+
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] + operand.data[i]
+        }
+
+        Ok(())
+    }
+    
+    pub fn sub(&mut self, operand:NdMatrix<T>) -> Result<(), Error> {
+        if self.dimensions != operand.dimensions {return Err(Error::InvalidDimensions)}
+
+        let res = self.data[0].checked_sub(&operand.data[0]);
+        if res == None {return Err(Error::CannotOperate)}
+
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] - operand.data[i]
+        }
+
+        Ok(())
+    }
+
+    pub fn mul(&mut self, operand:NdMatrix<T>) -> Result<(), Error> {
+        if self.dimensions != operand.dimensions {return Err(Error::InvalidDimensions)}
+
+        let res = self.data[0].checked_mul(&operand.data[0]);
+        if res == None {return Err(Error::CannotOperate)}
+
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] * operand.data[i]
+        }
+
+        Ok(())
+    }
+    
+    pub fn div(&mut self, operand:NdMatrix<T>) -> Result<(), Error> {
+        //error catches
+        if self.dimensions != operand.dimensions {return Err(Error::InvalidDimensions)}
+
+        let res = self.data[0].checked_div(&operand.data[0]);
+        if res == None {return Err(Error::CannotOperate)}
+
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] / operand.data[i]
+        }
+
+        Ok(())
+    }
+
+
+    //const arithmetic
+    pub fn const_add(&mut self, operand:T) {
+        
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] + operand
+        }
+
+    }
+
+    pub fn const_sub(&mut self, operand:T) {
+        
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] - operand
+        }
+      
+    }
+
+    pub fn const_mul(&mut self, operand:T) {
+        
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] * operand
+        }
+     
+    }
+
+    pub fn const_div(&mut self, operand:T) {
+        
+        for i in 0..self.len() {
+            self.data[i] = self.data[i] / operand
+        }
+     
+    }
+
+}
+
+//overloads
+use std::ops;
+
+impl<T:num_traits::Num> ops::Add<NdMatrix<T>> for NdMatrix<T> {
+    type Output = Self;
+
+    fn add(self, rhs: NdMatrix<T>) -> Self {
+        self.add(rhs)
+    }
+}
+
+impl<T:num_traits::Num> ops::Sub<NdMatrix<T>> for NdMatrix<T> {
+    type Output = Self;
+
+    fn sub(self, rhs: NdMatrix<T>) -> Self {
+        self.sub(rhs)
+    }
+}
+
+impl<T:num_traits::Num> ops::Mul<NdMatrix<T>> for NdMatrix<T> {
+    type Output = Self;
+
+    fn mul(self, rhs: NdMatrix<T>) -> Self {
+        self.mul(rhs)
+    }
+}
+
+impl<T:num_traits::Num> ops::Div<NdMatrix<T>> for NdMatrix<T> {
+    type Output = Self;
+
+    fn div(self, rhs: NdMatrix<T>) -> Self {
+        self.div(rhs)
+    }
+}
+
+
+
 #[derive(Clone, Debug)]
 pub enum Error {
     InvalidDimensions,
     OOBIndex,
+    CannotOperate,
 }

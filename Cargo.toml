@@ -1,6 +1,6 @@
 [package]
 name = "nthD_Matrix"
-version = "0.0.5"
+version = "0.0.6"
 edition = "2021"
 
 [lib]
@@ -14,3 +14,4 @@ path = "tests/integration_tests.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+num-traits = "0.2.15"

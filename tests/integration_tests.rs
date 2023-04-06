@@ -26,6 +26,8 @@ mod integration_tests {
 
         let value1 = matrix.pos(vec![0,0,0]).unwrap();
         let value2 = matrix.pos(vec![2,2,2]).unwrap();
+        
+        matrix.set_pos(vec![15,15,15], 30);
 
         println!("{value1} {value2}");
 
