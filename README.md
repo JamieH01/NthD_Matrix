@@ -26,4 +26,4 @@ let matrix_b = matrix!([5,5]; usize, 10);
 matrix_a.add(matrix_b);//adds 2 matrixes
 matrix_a.const_add(15);//adds one value to every element of a matrix
 ```
-`add`, `sub`, `div`, and `mul` can be called, along with their constant counterparts. Note that 2 matrixes added MUST be the same size, and `mul` is not the traditional "matrix multiplication," it simply multiplies each element together.
+`add`, `sub`, `div`, and `mul` can be called, along with their constant counterparts. Note that 2 matrixes added MUST be the same size, and `mul` is not the traditional "matrix multiplication," it simply multiplies each element together (coming soon).
