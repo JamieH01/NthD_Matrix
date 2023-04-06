@@ -10,7 +10,7 @@ And then accessed with either coordinates or an absolute index into the vector:
 let value1 = matrix.pos(vec![3,2,4])?;
 let value2 = matrix.nth(15)?;
 ```
-This setup makes interation through a matrix straightforward, with no messy nested for loops:
+This setup makes iteration through a matrix straightforward, with no messy nested for loops:
 ```
 for i in 0..matrix.len() {
     let pos:Vec<usize> = matrix.nth_to_pos(i)?;
