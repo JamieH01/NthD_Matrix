@@ -33,10 +33,10 @@ mod integration_tests {
 
     #[test]#[allow(unused_variables)]
     fn position_conversion() {
-        let matrix = matrix!([4,3]; usize, 15);
+        let matrix = matrix!([5,5]; usize, 15);
 
-        let starting_index = 3;
-        let index_to_pos = matrix.nth_to_pos(starting_index);//should return 7
+        let starting_index = 17;
+        let index_to_pos = matrix.nth_to_pos(starting_index);
         let pos_to_index = matrix.pos_to_nth(index_to_pos.clone());
 
         println!("{starting_index} => {index_to_pos:?} => {pos_to_index}");

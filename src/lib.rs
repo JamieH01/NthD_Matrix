@@ -89,30 +89,28 @@ impl<T: Clone> NdMatrix<T> {
         None
     }
 
-
-    pub fn pos_to_nth(&self, index:Vec<usize>) -> usize {
-        let mut total:usize = index[0];
-        let mut stride: usize = 1;
-        for i in 1..self.dimensions {
-            stride *= self.size[i-1];
-            total += index[i] * stride;
-        }    
-
-        total
-    }
-            //i want to pull my hair out
-    pub fn nth_to_pos(&self, index:usize) -> Vec<usize> {
-        let mut position = vec![0; self.dimensions];
-        let mut remaining_index = index;
-        for i in (0..self.dimensions).rev() {
-            let size_i = self.size[i];
-            let quotient = remaining_index / size_i;
-            let remainder = remaining_index % size_i;
-            position[i] = remainder;
-            remaining_index = quotient;
+    //thank you chatgpt for writing these 2 methods because i wanted to pull my hair out
+    //no idea wtfs goin on in the for loop tho
+    pub fn pos_to_nth(&self, pos: Vec<usize>) -> usize {
+        let mut result = 0;
+        let mut stride = 1;
+        for (p, s) in pos.iter().rev().zip(self.size.iter().rev()) {
+            result += p * stride;
+            stride *= s;
         }
-        position
-    
+        result
+    }
+
+    pub fn nth_to_pos(&self, nth: usize) -> Vec<usize> {
+        let mut result = Vec::with_capacity(self.size.len());
+        let mut rem = nth;
+        for s in self.size.iter().rev() {
+            let p = rem % s;
+            rem /= s;
+            result.push(p);
+        }
+        result.reverse();
+        result
     }
 
     //properties
