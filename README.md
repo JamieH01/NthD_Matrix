@@ -3,7 +3,7 @@ A simple library that allows you to use matrixes of any size and dimension, and 
 Matrixes can be initialized easily with the `matrix!` macro:
 ```
 //dimensions, type, default
-let matrix = matrix!([4,3]; usize, 15);
+let matrix = matrix!([10,10,10]; usize, 15);
 ```
 And then accessed with either coordinates or an absolute index into the vector:
 ```
