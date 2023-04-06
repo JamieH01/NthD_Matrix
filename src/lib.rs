@@ -53,13 +53,9 @@ impl<T: Clone> NdMatrix<T> {
         if index.len() != self.size.len() {return Err(Error::InvalidDimensions)}
         if oob(&index, &self.size) {return Err(Error::OOBIndex)}
 
-        //fuckin, math n shit
-        let mut total:usize = 0;
-        for i in 0..self.dimensions {
-            total += index[i] * (self.dimensions - (i+1))
-        }
 
-
+        let total = self.pos_to_nth(index).unwrap();
+        
         Ok(self.data[total].clone())
     }
 
@@ -74,7 +70,7 @@ impl<T: Clone> NdMatrix<T> {
         if index.len() != self.size.len() {return Some(Error::InvalidDimensions)}
         if oob(&index, &self.size) {return Some(Error::OOBIndex)}
         
-        let total = self.pos_to_nth(index);
+        let total = self.pos_to_nth(index).unwrap();
 
         self.data[total] = value;
 
@@ -89,29 +85,37 @@ impl<T: Clone> NdMatrix<T> {
         None
     }
 
+
     //thank you chatgpt for writing these 2 methods because i wanted to pull my hair out
     //no idea wtfs goin on in the for loop tho
-    pub fn pos_to_nth(&self, pos: Vec<usize>) -> usize {
+    pub fn pos_to_nth(&self, index:Vec<usize>) -> Result<usize, Error> {
+        if index.len() != self.size.len() {return Err(Error::InvalidDimensions)}
+        if oob(&index, &self.size) {return Err(Error::OOBIndex)}       
+        
         let mut result = 0;
         let mut stride = 1;
-        for (p, s) in pos.iter().rev().zip(self.size.iter().rev()) {
+        for (p, s) in index.iter().rev().zip(self.size.iter().rev()) {
             result += p * stride;
             stride *= s;
         }
-        result
+        Ok(result)
     }
 
-    pub fn nth_to_pos(&self, nth: usize) -> Vec<usize> {
+    pub fn nth_to_pos(&self, index:usize) -> Result<Vec<usize>, Error> {
+        if index >= self.length {return Err(Error::OOBIndex)}
+
         let mut result = Vec::with_capacity(self.size.len());
-        let mut rem = nth;
+        let mut rem = index;
         for s in self.size.iter().rev() {
             let p = rem % s;
             rem /= s;
             result.push(p);
         }
         result.reverse();
-        result
+        Ok(result)
     }
+
+
 
     //properties
     pub fn len(&self) -> usize {

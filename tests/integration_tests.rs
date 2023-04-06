@@ -36,8 +36,8 @@ mod integration_tests {
         let matrix = matrix!([5,5]; usize, 15);
 
         let starting_index = 17;
-        let index_to_pos = matrix.nth_to_pos(starting_index);
-        let pos_to_index = matrix.pos_to_nth(index_to_pos.clone());
+        let index_to_pos = matrix.nth_to_pos(starting_index).unwrap();
+        let pos_to_index = matrix.pos_to_nth(index_to_pos.clone()).unwrap();
 
         println!("{starting_index} => {index_to_pos:?} => {pos_to_index}");
     }
