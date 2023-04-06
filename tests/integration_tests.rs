@@ -61,4 +61,37 @@ mod integration_tests {
 
         println!("{const_val} {val}")
     }
+
+    use::jml::*;
+    use device_query::{DeviceQuery, DeviceState, Keycode};
+    #[test]#[allow(unused_variables)]
+    fn uv_map_test() {
+        let mut window = WindowContainer::new(255, 255, "UV Map", Color::Black.value());
+        let mut matrix = matrix!([255, 255, 255]; u32, 0);
+
+        for i in 0..matrix.len() {
+            let pos = matrix.nth_to_pos(i).unwrap();
+            let val = from_u8_rgb(try_it!(pos[0]), try_it!(pos[1]), try_it!(pos[2]));
+            matrix.set_nth(i, val);
+        }
+
+        for i in 0..window.buffer.len() {
+            let pos = window.buffer.nth_to_pos(i);
+            window.buffer.set_nth(i, matrix.pos(vec![pos.0, pos.1, 0]).unwrap_or(0))
+        }
+
+        let mut depth = 0;
+        escape_loop! ({
+            window.update();
+            depth += 1;
+            if depth > 255 {depth = 0}
+            for i in 0..window.buffer.len() {
+                let pos = window.buffer.nth_to_pos(i);
+                window.buffer.set_nth(i, matrix.pos(vec![pos.0, pos.1, depth]).unwrap_or(0))
+            }            
+        });
+    
+    
+    }
+
 }
