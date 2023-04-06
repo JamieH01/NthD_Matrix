@@ -226,40 +226,6 @@ NdMatrix<T> {
 
 }
 
-//overloads
-use std::ops;
-
-impl<T:num_traits::Num> ops::Add<NdMatrix<T>> for NdMatrix<T> {
-    type Output = Self;
-
-    fn add(self, rhs: NdMatrix<T>) -> Self {
-        self.add(rhs)
-    }
-}
-
-impl<T:num_traits::Num> ops::Sub<NdMatrix<T>> for NdMatrix<T> {
-    type Output = Self;
-
-    fn sub(self, rhs: NdMatrix<T>) -> Self {
-        self.sub(rhs)
-    }
-}
-
-impl<T:num_traits::Num> ops::Mul<NdMatrix<T>> for NdMatrix<T> {
-    type Output = Self;
-
-    fn mul(self, rhs: NdMatrix<T>) -> Self {
-        self.mul(rhs)
-    }
-}
-
-impl<T:num_traits::Num> ops::Div<NdMatrix<T>> for NdMatrix<T> {
-    type Output = Self;
-
-    fn div(self, rhs: NdMatrix<T>) -> Self {
-        self.div(rhs)
-    }
-}
 
 
 

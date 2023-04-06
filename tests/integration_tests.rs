@@ -43,4 +43,22 @@ mod integration_tests {
 
         println!("{starting_index} => {index_to_pos:?} => {pos_to_index}");
     }
+
+    #[test]#[allow(unused_variables)]
+    fn arith_test() {
+        let mut const_matrix = matrix!([5,5]; usize, 15);
+        const_matrix.const_add(12);
+        let const_val = const_matrix.nth(3).unwrap();
+        
+        let mut matrix_a = matrix!([5,5]; usize, 10);        
+        let mut matrix_b = matrix!([5,5]; usize, 10); 
+
+        matrix_a.add(matrix_b);
+        let val = matrix_a.nth(5).unwrap();
+
+
+
+
+        println!("{const_val} {val}")
+    }
 }
