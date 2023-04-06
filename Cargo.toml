@@ -22,5 +22,4 @@ path = "tests/integration_tests.rs"
 num-traits = "0.2.15"
 
 [dev-dependencies]
-JamiesMiscLibrary = { git = "https://github.com/JamieH01/JamiesMiscLibrary", version = "0.0.6" }
-device_query = "1.1.3"
+
