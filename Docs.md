@@ -1,9 +1,9 @@
 # Documentation
 ## matrix!
-A macro that makes initializing matrixes easier. General warning that as larger matrixes are made, the size of the vector can get extremely large.
+A macro that makes initializing matrixes easier. General warning that as larger matrixes are made, the size of the vector can get extremely large. Optional parameter at the end for multithreading, as they can take a while to initialize if theyre very big. Recommend setting to 4-8, 16 if you want.
 ```
-//dimensions, type, default
-let matrix = matrix!([3,4]; usize, 15);
+//dimensions, type, default, threads
+let matrix = matrix!([3,4]; usize, 15, 8);
 ```
 
 ## NdMatrix<T>
@@ -18,9 +18,9 @@ length:usize,//length of the vector. this can be grabbed with the len() method.
 ```
 
 ### Methods
-`new(dim, default)`: Creates a matrix. generally advised to use the macro instead.
+`new(dim, default, threads)`: Creates a matrix. generally advised to use the macro instead. Multithreading support for initialization.
 ```
-let matrix = NdMatrix::<u32>::new(vec![4,3,5], 15);
+let matrix = NdMatrix::<u32>::new(vec![4,3,5], 15, 1);
 ```
 
 `pos(vec)`: Gets the value at a given position. Returns a Result.

@@ -4,8 +4,13 @@
 
 #[macro_export] macro_rules! matrix {
     ($dimensions:tt; $type:ty, $default:tt) => {
-        NdMatrix::<$type>::new(vec!$dimensions, $default);
+        NdMatrix::<$type>::new(vec!$dimensions, $default, 1);
+    };
+
+    ($dimensions:tt; $type:ty, $default:tt, $threads:tt) => {
+        NdMatrix::<$type>::new(vec!$dimensions, $default, $threads);
     }
+
 }
 
 
@@ -31,8 +36,9 @@ pub struct NdMatrix<T> {
     length:usize,//length of the vector
 }
 
-impl<T: Clone> NdMatrix<T> {
-    pub fn new(dim:Vec<usize>, default: T) -> Self {
+use std::thread;
+impl<T: Clone + Send + 'static> NdMatrix<T> {
+    pub fn new(dim:Vec<usize>, default: T, threads:usize) -> Self {
 
         let dimensions = dim.len();
         let size = dim;
@@ -43,7 +49,30 @@ impl<T: Clone> NdMatrix<T> {
             length *= size[i];
         }
         
-        let data = vec![default; length];
+        //MULTITHREADING MAGIC
+        let split = length / threads;
+        let remod = length % threads;
+
+        let mut thread_table:Vec<thread::JoinHandle<Vec<T>>> = vec![];
+
+        for _ in 0..threads {//thread inits
+            let thr_split = split;
+            let thr_default = default.clone();
+
+            thread_table.push(thread::spawn(move || {
+                vec![thr_default; thr_split]
+            }));
+        }
+
+        let mut data:Vec<T> = vec![];
+        for thread in thread_table {
+            let mut split_table = thread.join().unwrap();
+
+            data.append(&mut split_table);
+        }
+        data.append(&mut vec![default; remod]);
+        
+        //let data = vec![default; length];
 
         NdMatrix {data, dimensions, size, length}
     }
@@ -133,7 +162,7 @@ impl<T: Clone> NdMatrix<T> {
 }
 
 //arithmetic
-impl<T:num_traits::Num + Clone + Copy + 
+impl<T:num_traits::Num + Clone + Copy + Send + 'static +
 num_traits::CheckedAdd + num_traits::CheckedSub + num_traits::CheckedMul + num_traits::CheckedDiv> 
 NdMatrix<T> {
     //basic arithmetic
