@@ -64,5 +64,5 @@ matrix_a.const_add(15);//adds one value to every element of a matrix
 NdMatrix has an interator implemented. It returns the value, index, and position.
 ```
 let matrix = matrix!([3,3]; i32, 0);
-let mapped = &matrix.into_iter().map(|(i,n,p)| n).collect::<Vec<_>>();
+let mapped = &matrix.into_iter().map(|(val,nth,pos)| nth).collect::<Vec<_>>();
 ```
