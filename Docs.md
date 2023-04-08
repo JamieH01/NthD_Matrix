@@ -65,4 +65,4 @@ NdMatrix has an interator implemented. It returns the value, index, and position
 ```
 let matrix = matrix!([3,3]; i32, 0);
 let mapped = &matrix.into_iter().map(|(i,n,p)| n).collect::<Vec<_>>();
-``
+```
