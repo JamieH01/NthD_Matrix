@@ -70,6 +70,21 @@ mod integration_tests {
         println!("{const_val} {val}")
     }
 
+    #[test]#[allow(unused_variables)]
+    fn iter_test() {
+        let matrix = matrix!([3,3]; i32, 0);
+        let vec = vec![0,1,2,3,4,5,6,7,8];
+        let mapped = &matrix.into_iter().map(|(i,n,p)| n).collect::<Vec<_>>();
+        //assert_eq!(mapped, vec);
+
+        for item in mapped {
+            println!("{}", item);
+        }
+
+        println!("{:?}", mapped);
+
+    }
+
     //use::jml::*;
     //use device_query::{DeviceQuery, DeviceState, Keycode};
     //#[test]#[allow(unused_variables)]

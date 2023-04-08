@@ -17,6 +17,7 @@ for i in 0..matrix.len() {
     //do stuff with the position!
 }
 ```
+(iterators are a thing now too)
 
 Basic arithmetic is also available for numeric types:
 ```

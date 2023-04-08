@@ -34,6 +34,8 @@ pub struct NdMatrix<T> {
     size:Vec<usize>,//size of each layer
 
     length:usize,//length of the vector
+
+    count:usize,//iterator count
 }
 
 use std::thread;
@@ -73,8 +75,8 @@ impl<T: Clone + Send + 'static> NdMatrix<T> {
         data.append(&mut vec![default; remod]);
         
         //let data = vec![default; length];
-
-        NdMatrix {data, dimensions, size, length}
+        
+        NdMatrix {data, dimensions, size, length, count:0}
     }
 
 
@@ -146,6 +148,10 @@ impl<T: Clone + Send + 'static> NdMatrix<T> {
 
 
 
+        
+    
+
+
     //properties
     pub fn len(&self) -> usize {
         self.length
@@ -160,6 +166,22 @@ impl<T: Clone + Send + 'static> NdMatrix<T> {
     }
 
 }
+
+
+impl<T: Clone + Send + 'static> Iterator for NdMatrix<T> {
+    type Item = (T, usize, Vec<usize>);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.count < self.len() {
+            let item = self.data[self.count].clone();
+            let index = self.count;
+            let position = self.nth_to_pos(self.count).unwrap();
+            self.count += 1;
+            Some((item, index, position))
+        }else{None}
+    }
+}
+
 
 //arithmetic
 impl<T:num_traits::Num + Clone + Copy + Send + 'static +
